@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Button, IconButton } from '@material-ui/core';
 
 import { FirstTimeOverlay, MapWrapper, SideMenu, Charts, FilterBar, MapBar } from 'components';
-import JOYRIDE_STEPS from 'res/values/joyride';
+import { JOYRIDE_STEPS } from 'res/values/joyride';
+import { MAP_DISPLAY } from 'res/values/map';
 import { Rectangle, GeoJSON } from 'react-leaflet';
 import { getAllData, storeStateData, resetStateColor,defaultColors,covidColors, getStateDataReports, filterPublishedReports } from '../../utils/data-utils';
 
@@ -14,12 +15,6 @@ import Joyride, { ACTIONS, EVENTS, STATUS } from 'react-joyride';
 
 
 import './HomePage.css';
-
-export const MAP_DISPLAY = {
-  USA: 1,
-  ALASKA: 2,
-  HAWAII: 3
-}
 
 const styles = () => ({
   progress: {
@@ -31,10 +26,6 @@ const styles = () => ({
 
 
 class HomePage extends Component {
-
-// begin joy ride
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -50,12 +41,11 @@ class HomePage extends Component {
       isFixed: true,
       steps: JOYRIDE_STEPS,
     };
+
     this.statesRef = React.createRef();
     this.alaskaRef = React.createRef();
     this.hawaiiRef = React.createRef();
     this.mapRef = React.createRef();
-
-    
   }
 
   async componentDidMount() {
@@ -79,7 +69,6 @@ class HomePage extends Component {
         resetStateColor(layer, this.state.data,defaultColors);
       }
     })
-    
   }
 
   changeViewRegion = (event, region) => {

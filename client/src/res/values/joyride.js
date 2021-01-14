@@ -1,4 +1,4 @@
-const JOYRIDE_STEPS = [
+export const JOYRIDE_STEPS = [
         {
           target: '#hateCrimeTutorial',
           content: 'Welcome to the Hate Crime Map tutorial. Follow the instructions and then hit "Next" to proceed',
