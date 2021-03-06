@@ -210,9 +210,6 @@ class HomePage extends Component {
                 </div>
             <br />
               <FilterBar filterfn={this.filterIncidents} />
-
-
-            
             </SideMenu>
           </div>
       </div>
