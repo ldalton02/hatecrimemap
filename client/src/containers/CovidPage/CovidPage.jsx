@@ -161,7 +161,7 @@ class CovidPage extends Component {
 
           <div className="side">
             <SideMenu>
-            <h2 className="sideMenu__header">{"COVID Hate Crimes in " + (this.state.currentDisplay == 'none' ? "US" : this.state.currentDisplay) }</h2>
+            <h2 className="sideMenu__header">{"COVID Hate Incidents in " + (this.state.currentDisplay == 'none' ? "US" : this.state.currentDisplay) }</h2>
                 { this.state.currentDisplay != "none" ?
                   <div className={ `sideMenu__info ${classes.dateRange}` }>
                     <p>{this.state.data[this.state.currentDisplay].children[0].date} - {this.state.data[this.state.currentDisplay].children[this.state.data[this.state.currentDisplay].children.length - 1].date}</p>

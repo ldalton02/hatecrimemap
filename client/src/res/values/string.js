@@ -37,3 +37,7 @@ export const ABOUT_DIALOGS = {
 
     }
 }
+
+export const COVID_HOME = {
+  
+}
