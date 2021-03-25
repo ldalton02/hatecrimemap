@@ -50,12 +50,14 @@ const MapWrapper = (props) => {
         <Nouislider behaviour='tap-drag'
                     connect
                     range={{
-                        min: timestamp('Jan 1,2020'),
-                        max: timestamp(Date.now())
+                        min: 2015,
+                        max: 2021
                     }}
                     direction='ltr'
-                    step={24 * 60 * 60 * 1000}
-                    start={[timestamp('Jan 1,2020'), timestamp(Date.now())]}
+                    pips={{mode: "count", values: 5}}
+                    clickablePips
+                    step={1}
+                    start={[2015, 2021]}
                     />
       </div>
       <Map id="USA" ref={props.mapRef} maxBounds={worldBounds} minZoom={2} zoomSnap={0.25} center={usaCentre} zoom={4.5} zoomEnd={props.updateZoom}>
