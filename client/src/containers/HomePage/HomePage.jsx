@@ -42,6 +42,7 @@ class HomePage extends Component {
       isFetching: true,
       currentDisplay: 'none',
       filterPublished: false,
+      filterTimeRange: [2015, 2021],
       spotlightClicks: true,  
       locked: false, // lock the sidebar on a state or county
       run: false,
@@ -175,6 +176,10 @@ class HomePage extends Component {
     this.setState({ filterPublished: flt }) // true or false
   }
 
+  filterTime = (time) => {
+    this.setState({ filterTimeRange: time })
+  }
+
   // Return value, success (in our terms, not react's)
   updateState = (state, lock = false) => {
     if(lock || !this.state.locked) {  // lock parameter overrides current lock
@@ -228,7 +233,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { isFetching, currentDisplay,run, steps,stepIndex } = this.state;
+    const { isFetching, currentDisplay, run, steps,stepIndex } = this.state;
     const { classes } = this.props;
 
 
@@ -236,13 +241,27 @@ class HomePage extends Component {
       return <CircularProgress className={classes.progress} />;
     }
 
-    let data;
+    let data, dataPtr;
     if (this.state.filterPublished) {
-      data = this.state.publishedData
+      dataPtr = this.state.publishedData
     } else {
-      data = this.state.data;
+      dataPtr = this.state.data;
     }
-
+    // timeslider filter. TODO: make a generic state data filter/callback that handles pointer and closures
+    // TODO: sort by date and binary search
+    data = {}
+    for (var state in dataPtr) {
+      if (!dataPtr[state].children) continue;
+      data[state] = {children: dataPtr[state].children.filter(incident => {
+          let yr = (new Date(incident.date)).getFullYear();
+          return yr >= this.state.filterTimeRange[0] && yr <= this.state.filterTimeRange[1]
+        }),
+      count: dataPtr[state].count
+      }
+    }
+    data.max = dataPtr.max;
+    console.log(dataPtr);
+    console.log(data)
     return (
 
       <div className="homePage">
@@ -252,7 +271,7 @@ class HomePage extends Component {
           {/* TODO: context for mapdata and data.states? */}
           <MapWrapper region={this.state.region} updateState={this.updateState} updateCounty={this.updateCounty}
           statesRef={this.statesRef} mapRef={this.mapRef} alaskaRef={this.alaskaRef} hawaiiRef={this.hawaiiRef}
-          data={data} updateView={this.changeViewRegion} updateZoom={this.updateZoom} zoom={this.getZoom}>
+          data={data} updateView={this.changeViewRegion} updateZoom={this.updateZoom} zoom={this.getZoom} filterTime={this.filterTime} >
           <MapBar changeRegion={this.changeViewRegion} region={this.state.region}/>
           <Joyride
               run={run}

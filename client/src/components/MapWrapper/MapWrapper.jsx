@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Map, TileLayer, MapControl } from 'react-leaflet';
 import { Rectangle, GeoJSON } from 'react-leaflet';
 import { usa } from '../../res/usa.js';
@@ -44,6 +44,11 @@ const MapWrapper = (props) => {
     covidFlag = 0
   }
 
+  const [timeFlt, setTimeFlt] = useState([2015, 2021]);
+  useEffect(() => {
+    props.filterTime(timeFlt);
+  }, [timeFlt])
+
   return (
     <div id="MapWrapper">
       <div id="timeslider">
@@ -54,16 +59,17 @@ const MapWrapper = (props) => {
                         max: 2021
                     }}
                     direction='ltr'
-                    pips={{mode: "count", values: 5}}
+                    pips={{mode: "count", values: 7}}
                     clickablePips
                     step={1}
                     start={[2015, 2021]}
+                    onUpdate={(render, handle, value, un, percent) => setTimeFlt(value) }
                     />
       </div>
       <Map id="USA" ref={props.mapRef} maxBounds={worldBounds} minZoom={2} zoomSnap={0.25} center={usaCentre} zoom={4.5} zoomEnd={props.updateZoom}>
         <TileLayer bounds={worldBounds} attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
         url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png" />
-          <Rectangle bounds={worldBounds} stroke={false} fillOpacity="0" onClick={() => props.updateState("none", true)} />
+          <Rectangle bounds={worldBounds} stroke={false} fillOpacity="0" onClick={() => {setTimeFlt(prev => prev + 1); props.updateState("none", true)}} />
           { props.zoom >= 6 && counties.map((state, index) => <GeoJSON key={index} data={state} onEahFeature={(feature, layer) => eachStatesCounties(feature, layer, props.data.counties, props.updateCounty,theColors)} /> ) }     
           <GeoJSON ref={props.statesRef} data={states_usa} onAdd={() => props.updateView(0, 1)} onEachFeature={(feature, layer) => eachState(feature, layer, props.data, 100, props.updateState,theColors)} />
           <GeoJSON ref={props.alaskaRef} data={states_alaska} onEachFeature={(feature, layer) => eachState(feature, layer, props.data, 100, props.updateState,theColors)} />
