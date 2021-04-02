@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { CircularProgress, Button, IconButton } from '@material-ui/core';
 
-import { FirstTimeOverlay, MapWrapper, SideMenu, Charts, FilterBar, MapBar } from '../../components';
+import { FirstTimeOverlay, MapWrapper, SideMenu, Charts, FilterBar, MapBar } from 'components';
+import { JOYRIDE_STEPS } from 'res/values/joyride';
+import { MAP_DISPLAY } from 'res/values/map';
 import { Rectangle, GeoJSON } from 'react-leaflet';
 import { getAllData, storeStateData, resetStateColor,defaultColors,covidColors, getStateDataReports, filterPublishedReports } from '../../utils/data-utils';
 
@@ -13,12 +15,6 @@ import Joyride, { ACTIONS, EVENTS, STATUS } from 'react-joyride';
 
 
 import './HomePage.css';
-
-export const MAP_DISPLAY = {
-  USA: 1,
-  ALASKA: 2,
-  HAWAII: 3
-}
 
 const styles = () => ({
   progress: {
@@ -30,10 +26,6 @@ const styles = () => ({
 
 
 class HomePage extends Component {
-
-// begin joy ride
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -48,86 +40,13 @@ class HomePage extends Component {
       run: false,
       disableBeacon: true,
       isFixed: true,
-
-      steps: [
-
-        {
-          target: '#hateCrimeTutorial',
-          content: 'Welcome to the Hate Crime Map tutorial. Follow the instructions and then hit "Next" to proceed',
-          spotlightClicks: true,          
-          disableOverlayClose: true,
-          disableBeacon: true,
-          hideCloseButton: true,
-          placement: 'center',
-        },
-
-        {
-          target: '#USA',
-          content: 'This is the map panel, hover over states to see their charts. Hover outside the United States to show all of the data again, then click "Next".',
-          spotlightClicks: true,
-        },
-
-        {
-          target: '.leaflet-interactive:nth-child(5)',
-          content: 'You can click on a state to lock/unlock it. Click on California to lock it and then click "Next"',
-          spotlightClicks: true,
-        },
-        {
-          target: '.sideMenu__chart',
-          content: 'Click on a bar in the chart to see details, and then click "Next".',
-          spotlightClicks: true,
-          disableBeacon: true,
-        },
-        {
-          target: '#hatecrimePieChart',
-          content: 'Click on a pie chart slice to open the data table for that state, and then click "Next". ',
-          spotlightClicks: true,
-          disableBeacon: true,
-          disableOverlay:true,
-          
-        },
-        {
-          target: '#hateCrimeDataTable',
-          content: 'This is the individual incident reports. Click "Close" to exit and then click "Next".',
-          disableOverlay:true,
-          disableBeacon: true,
-          spotlightClicks: true,
-          placement: 'center',
-        },
-        {
-          disableBeacon: false,
-          target: '#chartbackButton',
-          spotlightClicks: true,
-          disableOverlay:true,
-          content: 'Click on the "Back" button return to the previous chart, then click "Next".',
-        },      
-        {
-          target: '.leaflet-interactive:nth-child(5)',
-          content: 'Click on California to unlock it and then click "Next"',
-          spotlightClicks: true,
-        },
-        {
-          disableBeacon: false,
-          target: '#covidButton',
-          content: 'View and report Asian American/Pacific Islander hate crimes from COVID-19 discrimination here.',
-        },      
-        {
-          target: '#reportIncidentButton',
-          content: 'Anonymously report a hate crime if you yourself have experienced or have witnessed one.',
-          disableBeacon: false,
-        },      
-        {
-          target: '#hateCrimeTutorial',
-          content: 'You can view this tutorial again by clicking this button.',
-        },      
-      ]
+      steps: JOYRIDE_STEPS,
     };
+
     this.statesRef = React.createRef();
     this.alaskaRef = React.createRef();
     this.hawaiiRef = React.createRef();
     this.mapRef = React.createRef();
-
-    
   }
 
   async componentDidMount() {
@@ -151,7 +70,6 @@ class HomePage extends Component {
         resetStateColor(layer, this.state.data,defaultColors);
       }
     })
-    
   }
 
   changeViewRegion = (event, region) => {
@@ -260,8 +178,7 @@ class HomePage extends Component {
       }
     }
     data.max = dataPtr.max;
-    console.log(dataPtr);
-    console.log(data)
+    
     return (
 
       <div className="homePage">
@@ -311,9 +228,6 @@ class HomePage extends Component {
                 </div>
             <br />
               <FilterBar filterfn={this.filterIncidents} />
-
-
-            
             </SideMenu>
           </div>
       </div>
