@@ -218,14 +218,19 @@ class HomePage extends Component {
  
           <div className="side">
             <SideMenu>
-              <h2 className="sideMenu__header">Hate Crimes in {this.state.currentDisplay == 'none' ? "the US" : this.state.currentDisplay }               
-                          <IconButton  onClick={this.runTutorial} className={classes.menuButton} color="gray" aria-label="Menu">
-                          <HelpIcon id="hateCrimeTutorial" />
-                      </IconButton></h2>
-              
-                <div className="sideMenu__chart">
-                  <Charts data={data} max={data.groupMax} currState={this.state.currentDisplay} />
-                </div>
+              <div className="sideMenu__header">
+                <h2>Hate Crimes in {this.state.currentDisplay == 'none' ? "the US" : this.state.currentDisplay }               
+                  <IconButton  onClick={this.runTutorial} className={classes.menuButton} color="gray" aria-label="Menu">
+                    <HelpIcon id="hateCrimeTutorial" />
+                  </IconButton>
+                </h2>
+
+                <h4>In {this.state.filterTimeRange.join('-')}</h4>
+              </div>
+
+              <div className="sideMenu__chart">
+                <Charts data={data} max={data.groupMax} currState={this.state.currentDisplay} />
+              </div>
             <br />
               <FilterBar filterfn={this.filterIncidents} />
             </SideMenu>
